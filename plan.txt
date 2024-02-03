@@ -1,0 +1,102 @@
+class RequestType(Enum):
+    SERVICE = 'service'
+    PURCHASE = 'purchase'
+    LOGISTICS = 'logistics'
+
+class Source(Enum):
+    CHAT = 'chat'
+    CALL = 'call'
+
+class Executor(Enum):
+    SERVICE_DEPT = 'service department'
+    LOGISTICS_DEPT = 'logistics department'
+    SALES_DEPT = 'sales department'
+
+class Ticket:
+    def __init__(self, ticket_number, client_name, client_phone, request_type, source, description, executor, status="Open"):
+        self.ticket_number = ticket_number
+        self.client_name = client_name
+        self.client_phone = client_phone
+        self.request_type = request_type
+        self.source = source
+        self.description = description
+        self.executor = executor
+        self.status = status
+        self._solution = ""
+
+    @property
+        def solution(self):
+            return self._solution
+
+    @solution.setter
+    def solution(self, value):
+        # Здесь может быть более сложная логика проверки, в зависимости от  приложения
+        if self.executor is not None:  # Проверка, что у заявки есть исполнитель
+            self._solution = value
+            print(f"Solution added by {self.executor}: {value}")
+        else:
+            print("Ticket has no assigned executor. Solution cannot be added.")
+
+
+
+class Operator:
+    def __init__(self, name):
+        self.name = name
+
+    def create_request(self, ticket_number, client_name, client_phone, request_type, source, executor, description):
+        # Implement logic to open a new request
+        pass
+
+    def close_request(self, request):
+        # Implement logic to close a request
+        pass
+
+    def redirect_request(self, request, new_executor):
+        # Implement logic to redirect a request to a new executor
+        pass
+
+    def view_requests(self):
+        # Implement logic to view requests
+        pass
+
+    def process_request(self, request):
+        # Implement logic to process a request
+        pass
+
+class Salesperson:
+    def __init__(self, name):
+        self.name = name
+
+    def view_sales_requests(self):
+        # Implement logic to view sales requests
+        pass
+
+    def respond_to_request(self, request, response, new_operator):
+        request.description += f"\nResponse: {response}"
+        request.executor = new_operator
+        # Implement logic to save changes to the request
+        pass
+
+class ServiceEmployee:
+    def __init__(self, name):
+        self.name = name
+
+    def view_service_requests(self):
+        # Implement logic to view service-related requests
+        pass
+
+    def process_service_request(self, ticket):
+        # Implement logic to process a service-related request
+        pass
+
+class LogisticsEmployee:
+    def __init__(self, name):
+        self.name = name
+
+    def view_logistics_requests(self):
+        # Implement logic to view logistics-related requests
+        pass
+
+    def process_logistics_request(self, ticket):
+        # Implement logic to process a logistics-related request
+        pass

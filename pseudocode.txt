@@ -1,0 +1,50 @@
+# Pseudocode for CRM System
+
+# Define Enums
+Enum RequestType { SERVICE, PURCHASE, LOGISTICS }
+Enum Source { CHAT, CALL }
+Enum Executor { SERVICE_DEPT, LOGISTICS_DEPT, SALES_DEPT }
+
+# Function to initiate the program
+Function initiateProgram():
+    Print("Welcome to the Online Store CRM System!")
+    role = GetUserRole()  # Assuming a function to get the user's role
+
+    if role == "Operator":
+        OperatorFunctionality()
+    elif role == "Salesperson":
+        SalespersonFunctionality()
+    else:
+        Print("Invalid role. Exiting program.")
+
+# Functionality for Call Center Operator
+Function OperatorFunctionality():
+    Print("Operator, you can:")
+    Print("1. Open, close, or redirect requests.")
+    Print("2. Create new requests, view existing ones, and assign requests.")
+    Print("3. Provide details such as client info, request type, source, and executor.")
+    Print("4. Include a description for the issue.")
+    Print("5. In processing mode, close a request or reassign it.")
+    # Implement corresponding functions
+
+# Functionality for Salesperson
+Function SalespersonFunctionality():
+    Print("Salesperson, you can:")
+    Print("1. View a list of sales requests.")
+    Print("2. Open specific requests, respond to inquiries, and assign a new operator.")
+    Print("3. Check the status of returned requests.")
+    Print("4. If the issue is resolved, close the request or redirect to a specialist.")
+    # Implement corresponding functions
+
+# Function to store data in CSV files
+Function storeDataInCSV(data):
+    # Implement logic to write data to CSV files
+
+# Context and Objective
+Print("We're creating a tool to manage customer requests for an online store.")
+Print("The main goal is to handle requests efficiently and keep things simple.")
+Print("This is a basic system focusing on important features.")
+Print("Imagine it as an organized way to deal with customer issues in our online shop.")
+
+# Call the initiateProgram function to start the program
+initiateProgram()
