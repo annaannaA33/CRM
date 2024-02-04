@@ -1,57 +1,109 @@
 from Operator import Operator
+from Ticket import Ticket
+from FileManager import FileManager
+import sys
 
 def main():
+    select_role()
+
+def select_role():
     operator = Operator()
-
+    
     while True:
-        role = input("Enter your role (Operator/Salesperson/Delivery): ").lower()
-
-        if role == "operator":
+        print("WELCOME TO THE ONLINE STORE CRM SYSTEM! PLEASE SELECT YOUR ROLE:")
+        print("1. OPERATOR")
+        print("2. SALESPERSON")
+        print("3. DELIVERY")
+        print("4. EXIT")
+        choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR, 2 FOR SALESPERSON, 3 FOR DELIVERY, 4 TO EXIT): ").strip().lower()
+        if choice == "1":
             operator_functionality(operator)
-        #elif role == "salesperson":
-       #     salesperson_functionality()
-        #elif role == "delivery":
-        #    delivery_functionality()
-       # elif role == "exit":
-         #   print("Exiting the program. Goodbye!")
-         #   break
+        elif choice == "4":
+            sys.exit("EXITING THE PROGRAM. GOODBYE!")
         else:
-            print("Invalid role. Please try again.")
+            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION.")
+
+def print_operator_memu():
+    
+    print("WELCOME TO OPERATOR MODE. PLEASE SELECT FUNCTIONS:")
+    print("1. CREATE A NEW REQUEST")
+    print("2. VIEW REQUESTS")
+    print("3. RETURN TO ROLE SELECTION MENU")
+    #print("2. CLOSE A REQUEST")
+    #print("3. REDIRECT A REQUEST")
+    #print("5. PROCESS A REQUEST")
+    #print("6. SEND A REMINDER")
+           
 
 def operator_functionality(operator):
+    file_manager = FileManager()
     while True:
-        print("Operator, you can:")
-        print("1. Create a new request")
-        print("2. Close a request")
-        print("3. Redirect a request")
-        print("4. View requests")
-        print("5. Process a request")
-        print("6. Send a reminder")
-        print("7. Exit to the main menu")
-
-        choice = input("Enter your choice: ")
-
+        print_operator_memu()
+        choice = input("ENTER YOUR CHOICE: ")
         if choice == "1":
-            create_request(operator)
+            # CREATE A NEW REQUEST
+            print("CREATING A NEW REQUEST:")
+            new_ticket = operator.create_request() 
+            print(f"{new_ticket}") # print the string representation of the new_ticket
+            if new_ticket:
+                file_manager.save_ticket(new_ticket)
+
         elif choice == "2":
-            close_request(operator)
+            # VIEW REQUESTS
+            downloaded_requests = file_manager.load_tickets_from_file()
+
+            # Варианты выбора для фильтрации
+            status_choices = {'1': 'active', '2': 'in progress', '3': 'resolved', '4': 'closed'}
+            executor_choices = {'1': 'SERVICE_DEPT', '2': 'LOGISTICS_DEPT', '3': 'SALES_DEPT'}
+            source_choices = {'1': 'CHAT', '2': 'CALL'}
+            phone_choices = {'1': 'full', '2': 'partial', '3': 'skip'}
+
+            # Вывести варианты выбора
+            print("Status Choices:")
+            for key, value in status_choices.items():
+                print(f"{key}. {value}")
+
+            print("Executor Choices:")
+            for key, value in executor_choices.items():
+                print(f"{key}. {value}")
+
+            print("Source Choices:")
+            for key, value in source_choices.items():
+                print(f"{key}. {value}")
+
+            print("Phone Choices:")
+            for key, value in phone_choices.items():
+                print(f"{key}. {value}")
+
+            # Запросить ввод пользователя
+            status = status_choices.get(input("Enter the status to filter (or press Enter to skip): "), None)
+            executor = executor_choices.get(input("Enter the executor to filter (or press Enter to skip): "), None)
+            source = source_choices.get(input("Enter the source to filter (or press Enter to skip): "), None)
+
+            phone_choice = input("Choose an option for phone filtering: ").strip()
+            phone_filter = None
+            if phone_choice == '1':
+                phone_filter = input("Enter the full phone number to filter: ")
+            elif phone_choice == '2':
+                phone_filter = input("Enter the partial phone number to filter: ")
+
+            # Фильтрация заявок
+            filtered_tickets = Ticket.filter_tickets(downloaded_requests,
+                                                    status=status,
+                                                    executor=executor,
+                                                    source=source,
+                                                    phone_filter=phone_filter)
+
+            # Вывести отфильтрованные заявки
+            Ticket.print_tickets(filtered_tickets)
+
+
         elif choice == "3":
-            redirect_request(operator)
-        elif choice == "4":
-            view_requests(operator)
-        elif choice == "5":
-            process_request(operator)
-        elif choice == "6":
-            send_reminder(operator)
-        elif choice == "7":
+            # RETURN TO ROLE SELECTION MENU
             break
         else:
-            print("Invalid choice. Please try again.")
+            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
 
-def create_request(operator):
-    # Implement logic to get input for creating a request
-    ticket = operator.create_request(ticket.ticket_number, ticket.client_name, ticket.client_phone, ticket.request_type, ticket.source, ticket.executor, ticket.description)
-    # You may want to save the data to CSV here
 
 def close_request(operator):
     # Implement logic to get input for closing a request

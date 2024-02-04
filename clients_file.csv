@@ -1,0 +1,3 @@
+ticket_number,client_name,client_phone,request_type,source,description,executor,status,_solution,created_at
+963254d8-6945-4b3d-8b25-30822aeba909,апапапп,+2558888444,PURCHASE,CALL,вкпкпкпкпкпк,LOGISTICS_DEPT,active,,2024-02-04 03:12:30.148407
+2d477d88-0fe9-488d-b4d1-3bdcece87d11,lili,+52111111,PURCHASE,CALL,jjjjjjjjjjjjjjjjjjjjjj,LOGISTICS_DEPT,active,,2024-02-04 03:18:39.940178
