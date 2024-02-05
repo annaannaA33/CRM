@@ -86,13 +86,6 @@ class Operator(Ticket):
         return new_ticket
 
 
-
-
-
-    def close_request(self, request):
-        # Implement logic to close a request
-        pass
-
     def close_request(self, ticket):
         if ticket.status == "Resolved":
             ticket.status = "Closed"
@@ -105,9 +98,7 @@ class Operator(Ticket):
         # Implement logic to redirect a request to a new executor
         pass
 
-    def view_requests(self):
-        # Implement logic to view requests
-        pass
+    
 
     def process_request(self, request):
         # Implement logic to process a request

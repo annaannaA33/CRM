@@ -8,3 +8,28 @@
 При выборе роли сервис. Отображаем список заявок предназначенных для отдела сервиса(статус - актавна, ответственный - SERVICE_DEPT). Дальше сотрудник моет обрабатывать завки. предлагаем ввести номер заявки которую хотим открыть.  Если номер внесли правильно, то после высвечивается заявка полностью и предлагаем внести решение заявки, затем предлагаем изменить статус  заявки.  Если такой заявки с указанным номером нет, просим внести заново заявку.  также если пользователь вводит x- выход из пользователя. тогда снова спрашиваем роль или предлагаем нажать exit для выхода из программы.
 
 подумать про наследственностть классов
+
+
+'''
+    def create_request(self):
+                
+        # Gather information for the new ticket
+
+        client_name = input("Enter the client name: ")
+        client_phone = input("Enter the client phone: ")
+        request_type = input("Enter the request type: ")
+        source = input("Enter the source: ")
+        executor = input("Enter the executor: ")
+        description = input("Enter the description: ")
+        
+        # Create the new ticket
+        new_ticket = Ticket(
+            ticket_number = Ticket.generate_ticket_number(self),
+            client_name = client_name, 
+            client_phone = client_phone, 
+            request_type = request_type, 
+            source = source, 
+            executor = executor, 
+            description = description)
+        return new_ticket
+'''    

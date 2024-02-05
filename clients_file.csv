@@ -1,3 +1,5 @@
 ticket_number,client_name,client_phone,request_type,source,description,executor,status,_solution,created_at
-963254d8-6945-4b3d-8b25-30822aeba909,апапапп,+2558888444,PURCHASE,CALL,вкпкпкпкпкпк,LOGISTICS_DEPT,active,,2024-02-04 03:12:30.148407
-2d477d88-0fe9-488d-b4d1-3bdcece87d11,lili,+52111111,PURCHASE,CALL,jjjjjjjjjjjjjjjjjjjjjj,LOGISTICS_DEPT,active,,2024-02-04 03:18:39.940178
+6ad73ae2-e2bb-479b-be7d-2cddd3a45a62,Anna,+380500810779,SERVICE,CHAT,to buy somsth,LOGISTICS_DEPT,active,,2024-02-05 01:01:12.635142
+0b790be0-ff0d-497c-9466-8b4f0b20a94f,John,+11234568904,SERVICE,CHAT,ISSUE WITH INTERNET CONNECTION,SERVICE_DEPT,active,,2024-02-05 01:03:50.302435
+25a8a6b4-19ce-44de-8725-fd6e2e74c582,jjjjjj,+55555,SERVICE,CHAT,lllllll,SERVICE_DEPT,active,,2024-02-05 01:23
+0fe53837-4b27-401e-a998-952b19f4d2e6,kkkkkkkk,+25252525,PURCHASE,CHAT,kkkkkkkkkkk,SERVICE_DEPT,active,,2024-02-05 01:27
