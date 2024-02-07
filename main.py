@@ -14,37 +14,32 @@ def select_role():
         print("1. OPERATOR")
         print("2. SALESPERSON")
         print("3. DELIVERY")
-        print("4. EXIT")
-        choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR, 2 FOR SALESPERSON, 3 FOR DELIVERY, 4 TO EXIT): ").strip().lower()
+        print("X EXIT")
+
+
+        choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR, 2 FOR SALESPERSON, 3 FOR DELIVERY, 'X' TO EXIT): ").strip().lower()
         if choice == "1":
             operator_functionality(operator)
-        elif choice == "4":
+        elif choice == "x":
             sys.exit("EXITING THE PROGRAM. GOODBYE!")
         else:
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION.")
 
-def print_operator_menu():
+
     
-    print("WELCOME TO OPERATOR MODE. PLEASE SELECT FUNCTIONS:")
-    print("1. CREATE A NEW REQUEST")
-    print("2. VIEW REQUESTS")
-    print("0. RETURN TO ROLE SELECTION MENU")
-    print("3 TO USE FILTRES")
-    #print("2. CLOSE A REQUEST")
-    #print("3. REDIRECT A REQUEST")
-    #print("5. PROCESS A REQUEST")
-    #print("6. SEND A REMINDER")
            
 
 def operator_functionality(operator):
     file_manager = FileManager()
+    operator = Operator()
+    #ticket = Ticket(ticket.ticket_number, ticket.client_name, ticket.client_phone, ticket.request_type, ticket.source, ticket.description, ticket.executor, ticket.status, ticket._solution, ticket.created_at)
     while True:
-        print_operator_menu()
-        choice = input("ENTER YOUR CHOICE: ")
+        Operator.print_operator_menu()
+        choice = input("ENTER YOUR CHOICE: ").strip()
         if choice == "1":
             # CREATE A NEW REQUEST
             print("CREATING A NEW REQUEST:")
-            new_ticket = operator.create_request() 
+            new_ticket = operator.create_request() # сделать тикет суперклассом.но сначала сохранить
             print("New ticket created")
             print(f"{new_ticket}") # print the string representation of the new_ticket
             if new_ticket:
@@ -57,10 +52,48 @@ def operator_functionality(operator):
             Ticket.view_requests(downloaded_requests)
 
         elif choice == "3":
+            # FILTER REQUESTS
             downloaded_requests = []
             downloaded_requests = file_manager.load_tickets_from_file()
             filtered_tickets = Ticket.filter_tickets(downloaded_requests)
             Ticket.view_requests(filtered_tickets)
+
+        elif choice == "4":
+            # WORK WITH A TICKET
+            loaded_requests = []
+            required_ticket_number = None
+            loaded_requests = file_manager.load_tickets_from_file()
+            ticket = None  # Initialize the ticket variable
+
+            # Find the request by ticket number, client_phone, etc.
+            while True:
+                required_ticket_number = input("Enter the number of the ticket (or X to return to the menu): ").strip()
+                if required_ticket_number.lower() == "x":
+                    break  # Return to the menu
+
+                # Assuming find_ticket is a method of the Operator class that finds a ticket by its number
+                ticket = operator.find_ticket(required_ticket_number, loaded_requests)
+                if ticket:
+                    print(ticket)
+                    while True:
+                        selected_option = input("Select an action:\n1. View details\n2. Redirect request\n3. Close ticket\n4. Send reminder\nEnter your choice (X to return to the menu): ").strip().lower()
+                        if selected_option.lower() == "x":
+                            break  # Return to the menu
+                        if selected_option not in ["1", "2", "3", "4"]:
+                            print("Invalid choice. Please enter a valid option.")
+                            continue
+                        if selected_option == "1":
+                            ticket.print_ticket_details()  # Assuming print_ticket_details is a method of the Ticket class
+                        elif selected_option == "2":  
+                            # redirect request
+                            operator.redirect_request(ticket)
+                        elif selected_option == "3":
+                            Operator.close_ticket(ticket)
+                        elif selected_option == "4":
+                            operator.send_reminder(ticket)
+                    break  # Exit the loop if the ticket is successfully processed
+                else:
+                    print("Ticket not found. Please enter a valid ticket number.")
 
 
         elif choice == "0":
@@ -87,11 +120,6 @@ def redirect_request(operator):
         new_executor = input("Enter the new executor: ")
         operator.redirect_request(ticket, new_executor)
 
-def view_requests(operator):
-    # Implement logic to get input for viewing requests
-    status = input("Enter the status to filter (or press Enter to view all): ")
-    operator.view_requests(status)
-
 def process_request(operator):
     # Implement logic to get input for processing a request
     ticket_number = input("Enter the ticket number to process: ")
@@ -101,7 +129,7 @@ def process_request(operator):
         operator.process_request(ticket)
 
 def send_reminder(operator):
-    # Implement logic to get input for sending a reminder
+    #  to get input for sending a reminder
     ticket_number = input("Enter the ticket number to send a reminder: ")
     ticket = find_ticket(operator, ticket_number)
 

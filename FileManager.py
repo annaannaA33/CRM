@@ -65,8 +65,8 @@ class FileManager:
                         created_at=row['created_at']
                     )
                     list_of_tickets.append(ticket)
-
-                    print(f"Added ticket: {ticket}") # Debugging output
+                    # Debugging output
+                    #print(f"Added ticket: {ticket}") 
 
         except FileNotFoundError:
             print("File not found. No tickets loaded.")

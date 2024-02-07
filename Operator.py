@@ -86,24 +86,27 @@ class Operator(Ticket):
         return new_ticket
 
 
-    def close_request(self, ticket):
-        if ticket.status == "Resolved":
-            ticket.status = "Closed"
+    def redirect_request(ticket):
+        # logic for redirecting the request to a different executor
+        pass
+
+    def close_ticket(ticket):
+        if ticket.status == "resolved":
+            ticket.status = "closed"
             print(f"Ticket {ticket.ticket_number} closed successfully.")
         else:
             print("Cannot close the ticket. Please resolve it first.")
 
-
-    def redirect_request(self, request, new_executor):
-        # Implement logic to redirect a request to a new executor
+    def send_reminder(ticket):
+        # Implement logic for sending a reminder to the executor
         pass
 
-    
+    def print_operator_menu():
 
-    def process_request(self, request):
-        # Implement logic to process a request
-        pass
-
-    def send_reminder(self, request):
-        pass
+        print("WELCOME TO OPERATOR MODE. PLEASE SELECT FUNCTION:")
+        print("1. CREATE A NEW REQUEST")
+        print("2. VIEW REQUESTS")
+        print("3 TO USE FILTRES")
+        print("4 WORK WITH A TICKET")
+        print("'X' RETURN TO ROLE SELECTION MENU")
 

@@ -116,7 +116,7 @@ class Ticket:
                 print(f"Description: {ticket.description}")
                 print(f"Executor: {ticket.executor}")
                 print(f"Status: {ticket.status}")
-                print(f"Solution: {'Waiting for resolution' if not ticket.solution else ticket.solution}")
+                print(f"Solution: {'Waiting for resolution' if not ticket.solution else 'Answered... open request view more'}")
                 print(f"Created At: {ticket.created_at}")
                 print("-" * 30)
 
@@ -167,3 +167,18 @@ class Ticket:
         filtered_tickets = [ticket for ticket in list_of_tickets if normalize_phone_number(getattr(ticket, filter_criteria, '')) == filter_value]
 
         return filtered_tickets
+    
+    def print_ticket_details(ticket):
+        print(ticket)
+        print(f"Solution: {'Waiting for resolution' if not ticket.solution else ticket.solution}")
+        print('-' * 30)
+
+    def find_ticket(self, ticket_number, tickets):
+        for ticket in tickets:
+            if str(ticket.ticket_number) == ticket_number:
+                return ticket
+        return None
+    
+
+
+
