@@ -2,12 +2,15 @@ from Ticket import Ticket
 import re
 from datetime import datetime
 from RequestType import RequestType, TicketStatus, Source, Executor
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email_data import executor_email, sender_email_data, sender_password_data
 
-class Operator(Ticket):
+
+class Operator():
     def __init__(self):
-        
         self.tickets = []
-
     def validate_name(self, value):
         if len(value) >= 3 and value.isalpha():
             return value
@@ -85,10 +88,53 @@ class Operator(Ticket):
         )
         return new_ticket
 
-
+    @staticmethod
     def redirect_request(ticket):
-        # logic for redirecting the request to a different executor
-        pass
+        while True:
+            new_executor_number = int(input("Select the new executor: 1. SERVICE_DEPT\n 2. LOGISTICS_DEPT\n 3. SALES_DEPT\n").strip())
+            if new_executor_number == 1:
+                new_executor = "SERVICE_DEPT"
+            elif new_executor_number == 2:
+                new_executor = "LOGISTICS_DEPT"
+            elif new_executor_number == 3:
+                new_executor = "SALES_DEPT"
+            elif new_executor_number == 0:
+                break
+            else:
+                print("Please enter one of the provided numbers or 0 to go back.")
+                continue
+
+            if ticket.executor != new_executor:
+                ticket.executor = new_executor  # Исправлено с == на =
+                print(f"New executor for ticket {ticket.ticket_number} set successfully: {new_executor}")
+            else:
+                print("You are assigning the same executor.")
+            break
+
+    @staticmethod
+    def change_request_status(ticket):
+        while True:
+            new_status_number = int(input("Select the new status: 1. active\n 2. in progress\n 3. resolved\n 4. closed\n").strip())
+            if new_status_number == 1:
+                new_status = "active"
+            elif new_status_number == 2:
+                new_status = "in progress"
+            elif new_status_number == 3:
+                new_status = "resolved"
+            elif new_status_number == 4:
+                new_status = "closed"
+            elif new_status_number == 0:
+                break
+            else:
+                print("Please enter one of the provided numbers or 0 to go back.")
+                continue
+
+            if ticket.status != new_status:
+                ticket.status = new_status
+                print(f"New status for ticket {ticket.ticket_number} set successfully: {new_status}")
+            else:
+                print("You are assigning the same status.")
+            break
 
     def close_ticket(ticket):
         if ticket.status == "resolved":
@@ -97,9 +143,38 @@ class Operator(Ticket):
         else:
             print("Cannot close the ticket. Please resolve it first.")
 
-    def send_reminder(ticket):
-        # Implement logic for sending a reminder to the executor
-        pass
+    def send_reminder(self, ticket):
+        # Определяем адрес получателя в зависимости от исполнителя
+        recipient_email = ""
+        if ticket.executor == 'SERVICE_DEPT':
+            recipient_email = executor_email
+        elif ticket.executor in ['LOGISTICS_DEPT', 'SALES_DEPT']:
+            # Для примера используем тот же адрес, но можно добавить другие адреса
+            recipient_email = executor_email
+
+        # Адрес отправителя и пароль
+        sender_email = sender_email_data
+        sender_password = sender_password_data
+
+        # Создаем сообщение
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = recipient_email
+        message['Subject'] = "Напоминание: вашего ответа ожидает заявка"
+
+        # Текст сообщения
+        message_body = f"Заявка:\n{ticket}\n"
+        message.attach(MIMEText(message_body, 'plain'))
+
+        # Отправка сообщения
+        try:
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, recipient_email, message.as_string())
+            print("Напоминание успешно отправлено.")
+            server.quit()
+        except Exception as e:
+            print(f"Ошибка при отправке напоминания: {str(e)}")
 
     def print_operator_menu():
 

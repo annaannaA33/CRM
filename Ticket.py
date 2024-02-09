@@ -102,7 +102,7 @@ class Ticket:
     
 
     @staticmethod
-    def view_requests(list_of_tickets):
+    def print_requests(list_of_tickets):
         if not list_of_tickets:
             print("No tickets available.")
         else:
@@ -119,66 +119,151 @@ class Ticket:
                 print(f"Solution: {'Waiting for resolution' if not ticket.solution else 'Answered... open request view more'}")
                 print(f"Created At: {ticket.created_at}")
                 print("-" * 30)
-
-    def filter_tickets(list_of_tickets):
-        # Function to normalize phone numbers by removing non-digit characters
-        def normalize_phone_number(phone_number):
-            return ''.join(c for c in phone_number if c.isdigit())
-
-        # Menu for selecting filter criteria
-        print("Select filter criteria:")
-        print("0. Source")
-        print("1. Status")
-        print("2. Executor")
-        print("3. Phone")
-        filter_choice = int(input("Enter the number of your choice: "))
-
-        # Dictionary to map choices to filter criteria and possible values
-        filter_options = {
-            0: ('source', ['CHAT', 'CALL']),
-            1: ('status', ['active', 'in progress', 'resolved', 'closed']),
-            2: ('executor', ['SERVICE_DEPT', 'LOGISTICS_DEPT', 'SALES_DEPT']),
-            3: ('client_phone', None)
-        }
-
-        # Get the filter criteria and possible values based on the user's choice
-        filter_criteria, possible_values = filter_options.get(filter_choice, (None, None))
-
-        # If the user chose a criteria with predefined values, ask for the specific value
-        if possible_values:
-            print(f"Select {filter_criteria}:")
-            for i, value in enumerate(possible_values):
-                print(f"{i}. {value.capitalize()}")
-            filter_value = possible_values[int(input("Enter the number of your choice: "))]
-        else:
-            # For phone, allow free entry but validate for digits only
-            while True:
-                filter_value = input("Enter the phone number: ").strip()
-                if filter_value.isdigit():
-                    break
-                else:
-                    print("Warning: The phone number must consist only of digits.")
-
-        # Normalize the filter value for phone numbers
-        if filter_criteria == 'client_phone':
-            filter_value = normalize_phone_number(filter_value)
-
-        # Filter the list of tickets based on the user's input
-        filtered_tickets = [ticket for ticket in list_of_tickets if normalize_phone_number(getattr(ticket, filter_criteria, '')) == filter_value]
-
-        return filtered_tickets
-    
+  
+   
     def print_ticket_details(ticket):
+        print('-' * 30)
         print(ticket)
         print(f"Solution: {'Waiting for resolution' if not ticket.solution else ticket.solution}")
         print('-' * 30)
 
-    def find_ticket(self, ticket_number, tickets):
+    @staticmethod
+    def find_ticket(ticket_number, tickets):
         for ticket in tickets:
             if str(ticket.ticket_number) == ticket_number:
                 return ticket
         return None
     
+    @staticmethod
+    def filter_source(tickets):
+        filtered_tickets = []
+        # Prompt user to select the filter option
+        filter_value = int(input("Enter the number of your choice: 1. CHAT 2. CALL: ").strip().lower())
+        while True:
+            if filter_value == 1:
+                # Filter tickets based on the selected option
+                for ticket in tickets:
+                    if ticket.source == "CHAT":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 2:
+                for ticket in tickets:
+                    if ticket.source == "CALL":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 0:
+                break
+            else:
+                print("Choose option 0. BACK 1. CHAT 2. CALL")
+        return filtered_tickets
+    
+    @staticmethod
+    def filter_status(tickets):
+        filtered_tickets = []
+        # Prompt user to select the filter option
+        filter_value = int(input("Enter the number of your choice:\n 1. active\n 2. in progress\n 3. resolved\n 4. closed:\n ").strip().lower())
+        while True:
+            if filter_value == 1:
+                # Filter tickets based on the selected option
+                for ticket in tickets:
+                    if ticket.status == "active":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 2:
+                for ticket in tickets:
+                    if ticket.status == "in progress":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 3:
+                for ticket in tickets:
+                    if ticket.status == "resolved":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 4:
+                for ticket in tickets:
+                    if ticket.status == "closed":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == "x":
+                break
+            else:
+                print("Choose option 1. active 2. in progress 3. resolved 4. closed")
+        return filtered_tickets
 
+    @staticmethod
+    def filter_phone(tickets):
+        filtered_tickets = []
+        # Prompt user to enter the phone number to filter by
+        filter_value = input("Enter the client phone number: ").strip()
+        # Filter tickets based on the entered phone number
+        filtered_tickets = [ticket for ticket in tickets if ticket.client_phone == filter_value]
+        return filtered_tickets
 
-
+    @staticmethod
+    def filter_executor(tickets):
+        filtered_tickets = []
+        # Prompt user to select the filter option
+        filter_value = int(input("Enter the number of your choice: 1. SERVICE_DEPT 2. LOGISTICS_DEPT 3. SALES_DEPT: ").strip().lower())
+        while True:
+            if filter_value == 1:
+                # Filter tickets based on the selected option
+                for ticket in tickets:
+                    if ticket.executor == "SERVICE_DEPT":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 2:
+                for ticket in tickets:
+                    if ticket.executor == "LOGISTICS_DEPT":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == 3:
+                for ticket in tickets:
+                    if ticket.executor == "SALES_DEPT":
+                        filtered_tickets.append(ticket)
+                break
+            elif filter_value == "x":
+                break
+            else:
+                print("Choose option 1. SERVICE_DEPT 2. LOGISTICS_DEPT 3. SALES_DEPT")
+        return filtered_tickets
+    
+    @staticmethod
+    def all_filters(tickets):
+        while True:
+            print("Select filter criteria:")
+            print("1. Source")
+            print("2. Status")
+            print("3. Executor")
+            print("4. Phone")
+            print("X. Back to main menu")
+            filter_choice = int(input("Enter the number of your choice: ").strip().lower())
+            if filter_choice == 1:
+                # Call the filter_source function
+                filtered_tickets = Ticket.filter_source(tickets)
+                # Print the filtered tickets
+                Ticket.print_requests(filtered_tickets)
+                break
+            elif filter_choice == 2:
+                # Call the filter_status function
+                filtered_tickets = Ticket.filter_status(tickets)
+                # Print the filtered tickets
+                Ticket.print_requests(filtered_tickets)
+                break
+            elif filter_choice == 3:
+                # Call the filter_executor function
+                filtered_tickets = Ticket.filter_executor(tickets)
+                # Print the filtered tickets
+                Ticket.print_requests(filtered_tickets)
+                break
+            elif filter_choice == 4:
+                # Call the filter_phone function
+                filtered_tickets = Ticket.filter_phone(tickets)
+                # Print the filtered tickets
+                Ticket.print_requests(filtered_tickets)
+                break
+            elif filter_choice == "x":
+                break
+            else:
+                print("Please choose a valid filter option")
+        
+  

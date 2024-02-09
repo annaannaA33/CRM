@@ -5,10 +5,12 @@ import sys
 
 def main():
     select_role()
+    ticket: Ticket = Ticket(ticket_number, client_name, client_phone, request_type, source, description, executor)
 
 def select_role():
     operator = Operator()
-    
+
+
     while True:
         print("WELCOME TO THE ONLINE STORE CRM SYSTEM! PLEASE SELECT YOUR ROLE:")
         print("1. OPERATOR")
@@ -19,20 +21,17 @@ def select_role():
 
         choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR, 2 FOR SALESPERSON, 3 FOR DELIVERY, 'X' TO EXIT): ").strip().lower()
         if choice == "1":
-            operator_functionality(operator)
+            operator_functionality(operator, Ticket)
         elif choice == "x":
             sys.exit("EXITING THE PROGRAM. GOODBYE!")
         else:
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION.")
 
 
-    
-           
-
-def operator_functionality(operator):
+def operator_functionality(operator, Ticket):
     file_manager = FileManager()
     operator = Operator()
-    #ticket = Ticket(ticket.ticket_number, ticket.client_name, ticket.client_phone, ticket.request_type, ticket.source, ticket.description, ticket.executor, ticket.status, ticket._solution, ticket.created_at)
+
     while True:
         Operator.print_operator_menu()
         choice = input("ENTER YOUR CHOICE: ").strip()
@@ -55,42 +54,48 @@ def operator_functionality(operator):
             # FILTER REQUESTS
             downloaded_requests = []
             downloaded_requests = file_manager.load_tickets_from_file()
-            filtered_tickets = Ticket.filter_tickets(downloaded_requests)
-            Ticket.view_requests(filtered_tickets)
+            #filtered_tickets = Ticket.filter_tickets(downloaded_requests)
+            Ticket.all_filters(downloaded_requests)
+            #Ticket.view_requests(filtered_tickets)
 
         elif choice == "4":
             # WORK WITH A TICKET
             loaded_requests = []
             required_ticket_number = None
             loaded_requests = file_manager.load_tickets_from_file()
-            ticket = None  # Initialize the ticket variable
 
             # Find the request by ticket number, client_phone, etc.
             while True:
-                required_ticket_number = input("Enter the number of the ticket (or X to return to the menu): ").strip()
-                if required_ticket_number.lower() == "x":
+                required_ticket_number = input("Enter the number of the ticket (or X to return to the menu): ").strip().lower()
+                if required_ticket_number == "x":
                     break  # Return to the menu
 
                 # Assuming find_ticket is a method of the Operator class that finds a ticket by its number
-                ticket = operator.find_ticket(required_ticket_number, loaded_requests)
+                ticket = Ticket.find_ticket(required_ticket_number, loaded_requests)
                 if ticket:
                     print(ticket)
                     while True:
-                        selected_option = input("Select an action:\n1. View details\n2. Redirect request\n3. Close ticket\n4. Send reminder\nEnter your choice (X to return to the menu): ").strip().lower()
+                        selected_option = input("Select an action:\n1. View details\n2. Redirect request\n3. Close ticket\n4. Send reminder\n5.Change request status\n Enter your choice (X to return to the menu):\n ").strip().lower()
                         if selected_option.lower() == "x":
                             break  # Return to the menu
-                        if selected_option not in ["1", "2", "3", "4"]:
+                        if selected_option not in ["1", "2", "3", "4", "5"]:
                             print("Invalid choice. Please enter a valid option.")
                             continue
                         if selected_option == "1":
                             ticket.print_ticket_details()  # Assuming print_ticket_details is a method of the Ticket class
                         elif selected_option == "2":  
                             # redirect request
-                            operator.redirect_request(ticket)
+                            Operator.redirect_request(ticket)
+                            file_manager.save_tickets(loaded_requests)
                         elif selected_option == "3":
                             Operator.close_ticket(ticket)
+                            file_manager.save_tickets(loaded_requests)
                         elif selected_option == "4":
                             operator.send_reminder(ticket)
+                        elif selected_option == "5":
+                            # Change request status
+                            Operator.change_request_status(ticket)
+                            file_manager.save_tickets(loaded_requests)
                     break  # Exit the loop if the ticket is successfully processed
                 else:
                     print("Ticket not found. Please enter a valid ticket number.")
@@ -103,46 +108,7 @@ def operator_functionality(operator):
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
 
 
-def close_request(operator):
-    # Implement logic to get input for closing a request
-    ticket_number = input("Enter the ticket number to close: ")
-    ticket = find_ticket(operator, ticket_number)
 
-    if ticket:
-        operator.close_request(ticket)
-
-def redirect_request(operator):
-    # Implement logic to get input for redirecting a request
-    ticket_number = input("Enter the ticket number to redirect: ")
-    ticket = find_ticket(operator, ticket_number)
-
-    if ticket:
-        new_executor = input("Enter the new executor: ")
-        operator.redirect_request(ticket, new_executor)
-
-def process_request(operator):
-    # Implement logic to get input for processing a request
-    ticket_number = input("Enter the ticket number to process: ")
-    ticket = find_ticket(operator, ticket_number)
-
-    if ticket:
-        operator.process_request(ticket)
-
-def send_reminder(operator):
-    #  to get input for sending a reminder
-    ticket_number = input("Enter the ticket number to send a reminder: ")
-    ticket = find_ticket(operator, ticket_number)
-
-    if ticket:
-        operator.send_reminder(ticket)
-
-def find_ticket(operator, ticket_number):
-    for ticket in operator.tickets:
-        if ticket.ticket_number == ticket_number:
-            return ticket
-
-    print(f"Ticket {ticket_number} not found.")
-    return None
 
 if __name__ == "__main__":
     main()
