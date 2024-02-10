@@ -106,7 +106,9 @@ class Ticket:
         if not list_of_tickets:
             print("No tickets available.")
         else:
+            print('=' * 30)
             print("Tickets:")
+            print('=' * 30)
             for ticket in list_of_tickets:
                 print(f"Ticket Number: {ticket.ticket_number}")
                 print(f"Client Name: {ticket.client_name}")
@@ -121,7 +123,7 @@ class Ticket:
                 print("-" * 30)
   
    
-    def print_ticket_details(ticket):
+    def print_ticket_details(self, ticket):
         print('-' * 30)
         print(ticket)
         print(f"Solution: {'Waiting for resolution' if not ticket.solution else ticket.solution}")
@@ -266,4 +268,15 @@ class Ticket:
             else:
                 print("Please choose a valid filter option")
         
-  
+    @staticmethod
+    def process_the_lead(ticket):
+        print("Process the lead and provide a solution for the ticket. Once the solution is provided, the ticket will be returned to the operator for review.")
+        while True:
+            solution = input("Enter the solution: ")
+            if len(solution) >= 10:
+                ticket.solution = solution
+                ticket.status = "resolved"
+                print("Solution added successfully. Ticket status updated to 'resolved'.")
+                break
+            else:
+                print("Solution must be at least 10 characters long. Please try again.")

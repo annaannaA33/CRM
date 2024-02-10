@@ -1,15 +1,16 @@
 from Ticket import Ticket
 
-class Salesperson(Ticket):
-    def __init__(self):
-        self.tickets = []  # List to hold tickets assigned to the salesperson
+class ServiceDepartment(Ticket):
+    
 
+    def __init__(self):
+        self.tickets = []
 
 
     def find_ticket(self, ticket_number, tickets):
         # Вызов метода find_ticket родительского класса Ticket
         ticket = super().find_ticket(ticket_number, tickets)
-        if ticket and ticket.executor == "SALES_DEPT":
+        if ticket and ticket.executor == "SERVICE_DEPT":
             return ticket
         else:
             return None
@@ -18,6 +19,4 @@ class Salesperson(Ticket):
         print("Обработайте заявку, после внесите решение по заявке. После внесения решения заявка вернется к оператору на проверку.")
         
         ticket._solution = input("Введите решение: ")
-        return ticket._solution
-
 

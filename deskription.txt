@@ -33,3 +33,181 @@
             description = description)
         return new_ticket
 '''    
+quicksort , merge sort
+
+
+
+sender_email_data = "h71307518@gmail.com"
+sender_password_data = "ogiy eqro prwh ulrk"
+
+
+
+https://caniuse.com/?search=reset
+
+python main.py annaanisimovaal@gmail.com crypto
+pip install requests
+
+1. 3b20ff7a-0a43-4bcb-89d8-d4f7936e256f
+   John
+   +14155551234
+   SERVICE
+   CALL
+   Technical issue with the app
+   SERVICE_DEPT
+   active
+   Need further investigation
+   2024-02-07 10:30:00
+
+2. 6ad73ae2-e2bb-479b-be7d-2cddd3a45a62
+   Anna
+   +380500810779
+   SALES
+   CHAT
+   Product inquiry
+   SALES_DEPT
+   resolved
+   Product out of stock
+   2024-02-07 11:45:00
+
+3. 9cfbdcc4-1a9c-40dc-b6c6-0f70a109e12e
+   Emily
+   +447700900123
+   SERVICE
+   CALL
+   Account login issue
+   SERVICE_DEPT
+   in progress
+   Investigating the issue
+   2024-02-07 12:15:00
+
+4. e8de5f20-18f1-4b2d-9eaa-c16a8cf12f92
+   Michael
+   +15556667777
+   SERVICE
+   CHAT
+   Requesting refund
+   SERVICE_DEPT
+   active
+   Awaiting confirmation
+   2024-02-07 13:00:00
+
+5. 325ed2a7-9cb7-49b1-94f7-5b02646b9a9f
+   Sarah
+   +61412345678
+   SUPPORT
+   CALL
+   Installation problem
+   SERVICE_DEPT
+   resolved
+   Issue resolved over the call
+   2024-02-07 14:20:00
+
+6. f7d23eb0-af31-4389-b7c6-e82f4ff346fe
+   David
+   +12125551234
+   SERVICE
+   CHAT
+   Subscription cancellation
+   SERVICE_DEPT
+   active
+   Further details needed
+   2024-02-07 15:40:00
+
+7. d8a6fc7e-43d4-4f1d-9b2d-953f5d172f9d
+   Jessica
+   +447712345678
+   SALES
+   CHAT
+   Pricing inquiry
+   SALES_DEPT
+   active
+   Sent pricing details
+   2024-02-07 16:50:00
+
+8. 5a93488e-b7c7-43a2-8816-72dcf8904384
+   Kevin
+   +14156667788
+   SERVICE
+   CALL
+   Network connectivity issue
+   SERVICE_DEPT
+   in progress
+   Troubleshooting ongoing
+   2024-02-07 17:30:00
+
+9. 4d5f6d74-624f-4eb3-b002-ae3e9a89484d
+   Rachel
+   +61410987654
+   SUPPORT
+   CALL
+   Software update failure
+   SERVICE_DEPT
+   resolved
+   Updated successfully
+   2024-02-07 18:15:00
+
+10. c3e9d98a-6182-4467-9e3e-fc408d2cb0f5
+    Andrew
+    +380987654321
+    SALES
+    CHAT
+    Request for demo
+    SALES_DEPT
+    active
+    Schedule demo for next week
+    2024-02-07 19:00:00
+
+
+
+
+
+
+
+    def filter_tickets(list_of_tickets):
+        # Function to normalize phone numbers by removing non-digit characters
+        def normalize_phone_number(phone_number):
+            return ''.join(c for c in phone_number if c.isdigit())
+
+        # Menu for selecting filter criteria
+        print("Select filter criteria:")
+        print("0. Source")
+        print("1. Status")
+        print("2. Executor")
+        print("3. Phone")
+        filter_choice = int(input("Enter the number of your choice: "))
+
+        # Dictionary to map choices to filter criteria and possible values
+        filter_options = {
+            0: ('source', ['CHAT', 'CALL']),
+            1: ('status', ['active', 'in progress', 'resolved', 'closed']),
+            2: ('executor', ['SERVICE_DEPT', 'LOGISTICS_DEPT', 'SALES_DEPT']),
+            3: ('client_phone', None)
+        }
+
+        # Get the filter criteria and possible values based on the user's choice
+        filter_criteria, possible_values = filter_options.get(filter_choice, (None, None))
+
+        # If the user chose a criteria with predefined values, ask for the specific value
+        if possible_values:
+            print(f"Select {filter_criteria}:")
+            for i, value in enumerate(possible_values):
+                print(f"{i}. {value.capitalize()}")
+            filter_value = possible_values[int(input("Enter the number of your choice: "))]
+        else:
+            # For phone, allow free entry but validate for digits only
+            while True:
+                filter_value = input("Enter the phone number: ").strip()
+                if filter_value.isdigit():
+                    break
+                else:
+                    print("Warning: The phone number must consist only of digits.")
+
+        # Normalize the filter value for phone numbers
+        if filter_criteria == 'client_phone':
+            filter_value = normalize_phone_number(filter_value)
+
+        # Filter the list of tickets based on the user's input
+        filtered_tickets = [ticket for ticket in list_of_tickets if normalize_phone_number(getattr(ticket, filter_criteria, '')) == filter_value]
+
+        return filtered_tickets
+

@@ -28,7 +28,7 @@ class FileManager:
             with open(self.CLIENTS_FILE, "w", newline="", encoding="utf-8") as file:
                 writer = csv.DictWriter(file, fieldnames=header)
                 writer.writeheader()
-        with open(self.CLIENTS_FIL, "a", newline="", encoding="utf-8") as file:
+        with open(self.CLIENTS_FILE, "a", newline="", encoding="utf-8") as file:
             writer = csv.DictWriter(
                 file,
                 fieldnames=[

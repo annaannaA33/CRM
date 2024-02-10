@@ -1,10 +1,11 @@
 ticket_number,client_name,client_phone,request_type,source,description,executor,status,_solution,created_at
-25a8a6b4-19ce-44de-8725-fd6e2e74c582,jjjjjj,+55555,SERVICE,CHAT,lllllll,SERVICE_DEPT,in progress,,2024-02-09 06:14
-0fe53837-4b27-401e-a998-952b19f4d2e6,kkkkkkkk,+25252525,PURCHASE,CHAT,kkkkkkkkkkk,SERVICE_DEPT,resolved,,2024-02-09 06:14
-e91a1eb8-35ff-48de-bbf8-2114d1e9cfd7,вававава,+555852,LOGISTICS,CALL,the couriers did not deliver the goods,SALES_DEPT,closed,,2024-02-09 06:14
-314d5d59-bd7e-46cd-b9da-e9de45a20409,Andrew,380987654321,PURCHASE,CHAT,Request for demo,SALES_DEPT,active,,2024-02-09 06:14
-b087afe1-7d01-4404-8db2-d81fb6f0ff1e,Rachel,+61410987654,SERVICE,CHAT,Software update failure,SERVICE_DEPT,active,,2024-02-09 06:14
-1e66db8a-c77e-480c-a543-45357a44846d,Kevin,+14156667788,SERVICE,CALL,Network connectivity issue,SERVICE_DEPT,active,,2024-02-09 06:14
-758526ee-4022-4151-b88b-985632c08a4e,Jessica,+447712345678,PURCHASE,CHAT,Pricing inquiry,SALES_DEPT,active,,2024-02-09 06:14
-af6cd238-9ad4-418c-b48d-55f47011c6b7,Sarah,12025559999,LOGISTICS,CALL,Courier did not arrive on time,LOGISTICS_DEPT,active,,2024-02-09 06:14
-7ae3eb98-4565-441d-8cdf-b2eecea96bfe,Emily,+15551234567,LOGISTICS,CALL,"Received damaged items, need replacement",LOGISTICS_DEPT,active,,2024-02-09 06:14
+25a8a6b4-19ce-44de-8725-fd6e2e74c582,jjjjjj,+55555,SERVICE,CHAT,lllllll,SERVICE_DEPT,in progress,,2024-02-09 13:33
+0fe53837-4b27-401e-a998-952b19f4d2e6,kkkkkkkk,+25252525,PURCHASE,CHAT,kkkkkkkkkkk,SERVICE_DEPT,resolved,,2024-02-09 13:33
+e91a1eb8-35ff-48de-bbf8-2114d1e9cfd7,вававава,+555852,LOGISTICS,CALL,the couriers did not deliver the goods,SALES_DEPT,closed,,2024-02-09 13:33
+314d5d59-bd7e-46cd-b9da-e9de45a20409,Andrew,380987654321,PURCHASE,CHAT,Request for demo,SALES_DEPT,active,,2024-02-09 13:33
+b087afe1-7d01-4404-8db2-d81fb6f0ff1e,Rachel,+61410987654,SERVICE,CHAT,Software update failure,SERVICE_DEPT,active,,2024-02-09 13:33
+1e66db8a-c77e-480c-a543-45357a44846d,Kevin,+14156667788,SERVICE,CALL,Network connectivity issue,SERVICE_DEPT,active,,2024-02-09 13:33
+758526ee-4022-4151-b88b-985632c08a4e,Jessica,+447712345678,PURCHASE,CHAT,Pricing inquiry,SALES_DEPT,active,,2024-02-09 13:33
+af6cd238-9ad4-418c-b48d-55f47011c6b7,Sarah,12025559999,LOGISTICS,CALL,Courier did not arrive on time,LOGISTICS_DEPT,active,,2024-02-09 13:33
+7ae3eb98-4565-441d-8cdf-b2eecea96bfe,Emily,+15551234567,LOGISTICS,CALL,"Received damaged items, need replacement",LOGISTICS_DEPT,active,,2024-02-09 13:33
+ea4ddbbc-4ed9-45bf-89ac-20ddffee86c2,John,+14155551234,SERVICE,CALL,Technical issue with the app,SERVICE_DEPT,in progress,,2024-02-09 13:33

@@ -91,7 +91,7 @@ class Operator():
     @staticmethod
     def redirect_request(ticket):
         while True:
-            new_executor_number = int(input("Select the new executor: 1. SERVICE_DEPT\n 2. LOGISTICS_DEPT\n 3. SALES_DEPT\n").strip())
+            new_executor_number = int(input("Select the new executor: \n1. SERVICE_DEPT\n 2. LOGISTICS_DEPT\n 3. SALES_DEPT\n").strip())
             if new_executor_number == 1:
                 new_executor = "SERVICE_DEPT"
             elif new_executor_number == 2:
@@ -114,7 +114,7 @@ class Operator():
     @staticmethod
     def change_request_status(ticket):
         while True:
-            new_status_number = int(input("Select the new status: 1. active\n 2. in progress\n 3. resolved\n 4. closed\n").strip())
+            new_status_number = int(input("Select the new status: \n1. active\n 2. in progress\n 3. resolved\n 4. closed\n").strip())
             if new_status_number == 1:
                 new_status = "active"
             elif new_status_number == 2:
