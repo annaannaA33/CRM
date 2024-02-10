@@ -8,4 +8,8 @@ class DeliveryDepartment:
 
     def process_logistics_request(self, request):
         # Implement logic to process a logistics-related request
+<<<<<<< HEAD
         pass
+=======
+        pass
+>>>>>>> 7da7c05e36650867165bbf8e9306ee2761858832
