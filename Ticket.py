@@ -7,7 +7,7 @@ from RequestType import RequestType, TicketStatus, Source, Executor
 
 
 class Ticket:
-    def __init__(self, ticket_number, client_name, client_phone, request_type, source, description, executor, status="active", _solution = "", created_at=None):
+    def __init__(self, ticket_number, client_name, client_phone, request_type, source, description, executor, solution, created_at, status="active"):
         self.ticket_number = ticket_number
         self._client_name = client_name
         self._client_phone = client_phone
@@ -15,9 +15,9 @@ class Ticket:
         self.source = source
         self.description = description
         self.executor = executor
+        self.solution = solution
+        self.created_at = created_at
         self.status = status
-        self._solution = ""
-        self.created_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
 
     def __str__(self):
         return f"\n #: {self.ticket_number}\n -----\n CUSTOMER INFORMATION: \n NAME: {self.client_name}\n PHONE: {self.client_phone}\n REQUEST TYPE: {self.request_type}\n SOURCE: {self.source}\n DESCRIPTION: {self.description}\n EXECUTOR: {self.executor}\n STATUS: {self.status}\n DATE AND TIME CREATED: {self.created_at}\n -----\n"
@@ -27,6 +27,10 @@ class Ticket:
     def generate_ticket_number(self):
         self.ticket_number = uuid.uuid4()
         return self.ticket_number
+    
+    def get_created_at(self):
+        created_at = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+        return created_at
     
 
     # client_name    
@@ -70,22 +74,6 @@ class Ticket:
             raise ValueError("Description must be at least 5 characters long")
 
     
-    # solution
-    @property
-    # getter
-    def solution(self):
-        return self._solution
-
-    @solution.setter
-    def solution(self, value):
-        # 
-        if self.executor is not None:  # Проверка, что у заявки есть исполнитель
-            self._solution = value
-            print(f"Solution added by {self.executor}: {value}")
-        else:
-            print("Ticket has no assigned executor. Solution cannot be added.")
-
-
     def as_dict(self):
         return {
             "ticket_number": self.ticket_number,
@@ -96,7 +84,7 @@ class Ticket:
             "description": self.description,
             "executor": self.executor,
             "status": self.status,
-            "_solution": self._solution,
+            "solution": self.solution,
             "created_at": self.created_at,
         }
     

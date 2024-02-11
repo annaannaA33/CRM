@@ -3,11 +3,14 @@ from Ticket import Ticket
 from FileManager import FileManager
 import sys
 from Salesperson import Salesperson
+from ServiceDepartment import ServiceDepartment
+from DeliveryDepartment import DeliveryDepartment
+
 def main():
     select_role()
     ticket: Ticket = Ticket(ticket_number, client_name, client_phone, request_type, source, description, executor)
     sales_person = Salesperson(ticket_number, client_name, client_phone, request_type, source, description, executor)
-
+    #ticket_number, client_name, client_phone, request_type, source, description, executor, solution, created_at, status="active
 def select_role():
     operator = Operator()
 
@@ -16,20 +19,20 @@ def select_role():
         print("WELCOME TO THE ONLINE STORE CRM SYSTEM! PLEASE SELECT YOUR ROLE:")
         print("1. OPERATOR")
         print("2. SALESPERSON")
-        print("3. DELIVERY")
-        print("X EXIT")
+        print("3. LOGISTICS")
+        print("4. SERVICE")
+        print("0 EXIT")
 
 
-        choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR, 2 FOR SALESPERSON, 3 FOR DELIVERY, 0 TO EXIT): ").strip().lower()
+        choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR,  2 FOR SALESPERSON,  3 FOR LOGISTICS,  4 FOR SERVICE,  0 TO EXIT): ").strip()
         if choice == "1":
             operator_functionality(operator, Ticket)
         elif choice == "2":
             sales_department_functionality(Salesperson)
         elif choice == "3":
-            service_department_functionality(Salesperson)
-            pass
+            delivery_department_functionality(DeliveryDepartment)
         elif choice == "4":
-            delivery_department_functionality(operator, Ticket)
+            service_department_functionality(ServiceDepartment)
             pass            
         elif choice == "0":
             sys.exit("EXITING THE PROGRAM. GOODBYE!")
@@ -48,11 +51,11 @@ def operator_functionality(operator, Ticket):
             # CREATE A NEW REQUEST
             print("CREATING A NEW REQUEST:")
             new_ticket = operator.create_request() # сделать тикет суперклассом.но сначала сохранить
-            print("New ticket created")
+            print("=" * 30)
+            print("New ticket created:")
             print(f"{new_ticket}") # print the string representation of the new_ticket
             if new_ticket:
                 file_manager.save_ticket(new_ticket)
-
         elif choice == "2":
             # VIEW REQUESTS
             downloaded_requests = []
@@ -156,7 +159,9 @@ def sales_department_functionality(Salesperson):
                         elif selected_option == "2":  # process_the_lead
                             sales_person.process_the_lead(request)
                             # process_the_lead
-                            file_manager.save_tickets(requests)
+                            solution = sales_person.process_the_lead(request)
+                            if solution:
+                                file_manager.save_tickets(requests)
                     break  # Exit the loop if the ticket is successfully processed
                 else:
                     print("Ticket not found. Please enter a valid ticket number.")
@@ -169,11 +174,97 @@ def sales_department_functionality(Salesperson):
         else:
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
 
-def service_department_functionality(operator, Ticket):
-    pass
+def service_department_functionality(ServiceDepartment):
+    file_manager = FileManager()
+    service_dept = ServiceDepartment()
+    while True:
+        request_to_service = []
+        print("SERVICE department:\n")
+        choice = input("SELECT ACTION:   1. VIEW REQUESTS,   2. SEARCH REQUESTS: ").strip().lower()
+        if choice == "1": # VIEW REQUESTS
+            tickets = file_manager.load_tickets_from_file()
+            for ticket in tickets:
+                if ticket.executor == "SERVICE_DEPT":
+                    request_to_service.append(ticket)
+            service_dept.print_requests(request_to_service)
 
-def delivery_department_functionality(operator, Ticket):            
-    pass
+        elif choice == "2": # SEARCH REQUESTS   
+            while True:
+                request_number = None
+                requests = file_manager.load_tickets_from_file()
+                request_number = input("Введите   номер тикета для поиска: ")
+                request = service_dept.find_ticket(request_number, requests)
+                if request:
+                    print(request)
+                    while True:
+                        print("нажмите цифру с нужным вариантом:")
+                        selected_option = input("Select an action:\n1. View details\n2. Process the service request\n0 to return to the menu:\n ").strip().lower()
+                        if selected_option not in ["0", "1", "2"]:
+                            print("Invalid choice. Please enter a valid option.")
+                            continue
+                        if selected_option == "0":
+                            break  # Return to the menu   
+                        elif selected_option == "1":
+                            service_dept.print_ticket_details(request)
+                        elif selected_option == "2":  # process_service_request
+                            solution = service_dept.process_service_request(request)
+                            if solution:
+                                file_manager.save_tickets(requests)
+                    break  # Exit the loop if the ticket is successfully processed
+                else:
+                    print("Ticket not found. Please enter a valid ticket number.")
+
+        elif choice == "0":   
+            # RETURN TO ROLE SELECTION MENU
+            break
+        else:
+            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
+
+def delivery_department_functionality(DeliveryDepartment):
+    file_manager = FileManager()
+    delivery_dept = DeliveryDepartment()
+    while True:
+        request_to_deliver = []
+        print("LOGISTICS department:\n")
+        choice = input("SELECT ACTION:  1. VIEW REQUESTS,  2. SEARCH REQUESTS: ").strip().lower()
+        if choice == "1": # VIEW REQUESTS
+            tickets = file_manager.load_tickets_from_file()
+            for ticket in tickets:
+                if ticket.executor == "LOGISTICS_DEPT":
+                    request_to_deliver.append(ticket)
+            delivery_dept.print_requests(request_to_deliver)
+
+        elif choice == "2": # SEARCH REQUESTS  
+            while True:
+                request_number = None
+                requests = file_manager.load_tickets_from_file()
+                request_number = input("Введите  номер тикета для поиска: ")
+                request = delivery_dept.find_ticket(request_number, requests)
+                if request:
+                    print(request)
+                    while True:
+                        print("нажмите цифру с нужным вариантом:")
+                        selected_option = input("Select an action:\n1. View details\n2. Process the logistics request\n0 to return to the menu:\n ").strip().lower()
+                        if selected_option not in ["0", "1", "2"]:
+                            print("Invalid choice. Please enter a valid option.")
+                            continue
+                        if selected_option == "0":
+                            break  # Return to the menu  
+                        elif selected_option == "1":
+                            delivery_dept.print_ticket_details(request)
+                        elif selected_option == "2":  # process_logistics_request
+                            solution = delivery_dept.process_logistics_request(request)
+                            if solution:
+                                file_manager.save_tickets(requests)
+                    break  # Exit the loop if the ticket is successfully processed
+                else:
+                    print("Ticket not found. Please enter a valid ticket number.")
+
+        elif choice == "0":  
+            # RETURN TO ROLE SELECTION MENU
+            break
+        else:
+            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
 
 
 

@@ -1,15 +1,27 @@
-class DeliveryDepartment:
-    def __init__(self, name):
-        self.name = name
+from Ticket import Ticket
 
-    def view_logistics_requests(self):
-        # Implement logic to view logistics-related requests
-        pass
+class DeliveryDepartment(Ticket):
+    def __init__(self):
+        self.tickets = [] 
 
-    def process_logistics_request(self, request):
-        # Implement logic to process a logistics-related request
-<<<<<<< HEAD
-        pass
-=======
-        pass
->>>>>>> 7da7c05e36650867165bbf8e9306ee2761858832
+    def find_ticket(self, ticket_number, tickets):
+        # Вызов метода find_ticket родительского класса Ticket
+        ticket = super().find_ticket(ticket_number, tickets)
+        if ticket and ticket.executor == "LOGISTICS_DEPT":
+            return ticket
+        else:
+            return None
+
+    def process_logistics_request(self, ticket):
+        print("Обработайте заявку  логистики. После внесения решения заявка вернется к оператору на проверку.")
+        
+        solution = input("Введите решение: ")
+        if len(solution) >  5:
+            ticket.solution = solution
+            ticket.status = "resolved"
+            print("Решение сохранено, статус отвечено.")
+        else:
+            print("Решение не внесено.")
+            
+        ticket.print_ticket_details(ticket)  # Печатаем тикет полностью
+        return ticket.solution

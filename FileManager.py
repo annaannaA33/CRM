@@ -18,7 +18,7 @@ class FileManager:
             "description",
             "executor",
             "status",
-            "_solution",
+            "solution",
             "created_at",
         ]
         if (
@@ -40,7 +40,7 @@ class FileManager:
                     "description",
                     "executor",
                     "status",
-                    "_solution",
+                    "solution",
                     "created_at",
                 ],
             )
@@ -61,7 +61,7 @@ class FileManager:
                         description=row['description'],
                         executor=row['executor'],
                         status=row['status'],
-                        _solution=row['_solution'],
+                        solution=row['solution'],
                         created_at=row['created_at']
                     )
                     list_of_tickets.append(ticket)
@@ -83,7 +83,7 @@ class FileManager:
             "description",
             "executor",
             "status",
-            "_solution",
+            "solution",
             "created_at",
         ]
         with open(self.CLIENTS_FILE, "w", newline="", encoding="utf-8") as file:

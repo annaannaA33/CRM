@@ -49,44 +49,63 @@ class Operator():
       
 
     def create_request(self):
-        # Define a dictionary mapping parameter names to their validation functions
-        validations = {
-            'client_name': self.validate_name,
-            'client_phone': self.validate_phone,
-            'request_type': self.validate_request_type,
-            'source': self.validate_source,
-            'executor': self.validate_executor,
-            'description': self.validate_description,
-        }
+        # Collect ticket data through user input and validation
+        ticket_data = self.collect_ticket_data()
 
-        # Initialize a dictionary to store entered values
+        # If ticket data collection was successful, proceed to create the ticket
+        if ticket_data:
+            # Create a new Ticket instance
+            new_ticket = self.create_ticket(ticket_data)
+            return new_ticket
+        else:
+            print("Failed to collect ticket data. No ticket created.")
+            return None
+
+    def collect_ticket_data(self):
+        """Collect and validate ticket data from the user."""
         ticket_data = {}
+        fields = [
+            ('client_name', "Enter the client name: ", self.validate_name),
+            ('client_phone', "Enter the client phone: ", self.validate_phone),
+            ('request_type', "Enter the request type (0: SERVICE,  1: PURCHASE,  2: LOGISTICS): ", self.validate_request_type),
+            ('source', "Enter the source (0: CHAT,  1: CALL): ", self.validate_source),
+            ('executor', "Enter the executor (0: SERVICE_DEPT,  1: LOGISTICS_DEPT,  2: SALES_DEPT): ", self.validate_executor),
+            ('description', "Enter the description: ", self.validate_description),
+        ]
 
-        # Helper function to prompt for and validate a single parameter
-        def prompt_and_validate(param_name, prompt_text):
+        for field_name, prompt_text, validation_func in fields:
             while True:
                 try:
-                    value = validations[param_name](input(prompt_text))
-                    ticket_data[param_name] = value
-                    return value
+                    value = validation_func(input(prompt_text))
+                    ticket_data[field_name] = value
+                    break
                 except ValueError as e:
                     print(f"Error: {e}")
 
-        # Prompt for and validate each parameter
-        ticket_data['client_name'] = prompt_and_validate('client_name', "Enter the client name: ")
-        ticket_data['client_phone'] = prompt_and_validate('client_phone', "Enter the client phone: ")
-        ticket_data['request_type'] = prompt_and_validate('request_type', "Enter the request type (0: SERVICE, 1: PURCHASE, 2: LOGISTICS): ")
-        ticket_data['source'] = prompt_and_validate('source', "Enter the source (0: CHAT, 1: CALL): ")
-        ticket_data['executor'] = prompt_and_validate('executor', "Enter the executor (0: SERVICE_DEPT, 1: LOGISTICS_DEPT, 2: SALES_DEPT): ")
-        ticket_data['description'] = prompt_and_validate("description", "Enter the description: ")
-        
+        return ticket_data
 
-        # Create the new ticket using the validated information
+    def create_ticket(self, ticket_data):
+        """Create a new Ticket instance with the collected data."""
+        # Create a new Ticket instance with a placeholder for created_at
         new_ticket = Ticket(
-            ticket_number=Ticket.generate_ticket_number(self),
-            **ticket_data # Unpack the dictionary to pass keyword arguments to the Ticket constructor
+            ticket_number=None,  # Placeholder for ticket_number
+            client_name=ticket_data['client_name'],
+            client_phone=ticket_data['client_phone'],
+            request_type=ticket_data['request_type'],
+            source=ticket_data['source'],
+            description=ticket_data['description'],
+            executor=ticket_data['executor'],
+            solution="",  # Assuming no initial solution
+            created_at=None,  # Placeholder for created_at
+            status="active"  # Default status
         )
+
+        # Set the ticket_number and created_at attributes
+        new_ticket.ticket_number = new_ticket.generate_ticket_number()
+        new_ticket.created_at = new_ticket.get_created_at()
+
         return new_ticket
+
 
     @staticmethod
     def redirect_request(ticket):
@@ -183,5 +202,5 @@ class Operator():
         print("2. VIEW REQUESTS")
         print("3 TO USE FILTRES")
         print("4 WORK WITH A TICKET")
-        print("'X' RETURN TO ROLE SELECTION MENU")
+        print("0 RETURN TO ROLE SELECTION MENU")
 
