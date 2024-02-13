@@ -5,37 +5,40 @@ import sys
 from Salesperson import Salesperson
 from ServiceDepartment import ServiceDepartment
 from DeliveryDepartment import DeliveryDepartment
+import os
+import sys
+import questionary
+from questionary import Choice
+
 
 def main():
-    select_role()
-    ticket: Ticket = Ticket(ticket_number, client_name, client_phone, request_type, source, description, executor)
-    sales_person = Salesperson(ticket_number, client_name, client_phone, request_type, source, description, executor)
-    #ticket_number, client_name, client_phone, request_type, source, description, executor, solution, created_at, status="active
-def select_role():
     operator = Operator()
-
-
     while True:
         print("WELCOME TO THE ONLINE STORE CRM SYSTEM! PLEASE SELECT YOUR ROLE:")
-        print("1. OPERATOR")
-        print("2. SALESPERSON")
-        print("3. LOGISTICS")
-        print("4. SERVICE")
-        print("0 EXIT")
 
+        choices = [
+            Choice("Operator", value=1),
+            Choice("Salesperson", value=2),
+            Choice("Logistics", value=3),
+            Choice("Service", value=4),
+            Choice("Exit", value=0),
+        ]
 
-        choice = input("ENTER YOUR CHOICE: (1 FOR OPERATOR,  2 FOR SALESPERSON,  3 FOR LOGISTICS,  4 FOR SERVICE,  0 TO EXIT): ").strip()
-        if choice == "1":
+        choice = questionary.select(
+            "Select your role:", choices=choices, use_shortcuts=True
+        ).ask()
+
+        if choice == 1:
             operator_functionality(operator, Ticket)
-        elif choice == "2":
+        elif choice == 2:
             sales_department_functionality(Salesperson)
-        elif choice == "3":
+        elif choice == 3:
             delivery_department_functionality(DeliveryDepartment)
-        elif choice == "4":
+        elif choice == 4:
             service_department_functionality(ServiceDepartment)
-            pass            
-        elif choice == "0":
-            sys.exit("EXITING THE PROGRAM. GOODBYE!")
+        elif choice == 0:
+            print("Exiting the program. Goodbye!")
+            break
         else:
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION.")
 
@@ -50,10 +53,11 @@ def operator_functionality(operator, Ticket):
         if choice == "1":
             # CREATE A NEW REQUEST
             print("CREATING A NEW REQUEST:")
-            new_ticket = operator.create_request() # сделать тикет суперклассом.но сначала сохранить
+            new_ticket = operator.create_request()
+            os.system("cls" if os.name == "nt" else "clear")
             print("=" * 30)
             print("New ticket created:")
-            print(f"{new_ticket}") # print the string representation of the new_ticket
+            print(f"{new_ticket}")  # print the string representation of the new_ticket
             if new_ticket:
                 file_manager.save_ticket(new_ticket)
         elif choice == "2":
@@ -66,9 +70,9 @@ def operator_functionality(operator, Ticket):
             # FILTER REQUESTS
             downloaded_requests = []
             downloaded_requests = file_manager.load_tickets_from_file()
-            #filtered_tickets = Ticket.filter_tickets(downloaded_requests)
+            # filtered_tickets = Ticket.filter_tickets(downloaded_requests)
             Ticket.all_filters(downloaded_requests)
-            #Ticket.view_requests(filtered_tickets)
+            # Ticket.view_requests(filtered_tickets)
 
         elif choice == "4":
             # WORK WITH A TICKET
@@ -78,8 +82,10 @@ def operator_functionality(operator, Ticket):
 
             # Find the request by ticket number, client_phone, etc.
             while True:
-                required_ticket_number = input("Enter the number of the ticket (or 0 to return to the menu): ").strip().lower()
-                if required_ticket_number == 0:
+                required_ticket_number = input(
+                    "ENTER THE TICKET NUMBER TO SEARCH (OR 0 TO RETURN TO THE MENU): "
+                ).strip()
+                if required_ticket_number == "0":
                     break  # Return to the menu
 
                 # Assuming find_ticket is a method of the Operator class that finds a ticket by its number
@@ -87,15 +93,19 @@ def operator_functionality(operator, Ticket):
                 if ticket:
                     print(ticket)
                     while True:
-                        selected_option = input("Select an action:\n1. View details\n2. Redirect request\n3. Close ticket\n4. Send reminder\n5.Change request status\n Enter your choice (X to return to the menu):\n ").strip().lower()
-                        if selected_option.lower() == "x":
+                        selected_option = input(
+                            "SELECT AN ACTION:\n0. TO RETURN TO THE MENU\n1. VIEW DETAILS\n2. REDIRECT REQUEST\n3. CLOSE TICKET\n4. SEND REMINDER\n5.CHANGE REQUEST STATUS\n ENTER YOUR CHOICE:\n "
+                        ).strip()
+                        if selected_option == "0":
                             break  # Return to the menu
                         if selected_option not in ["1", "2", "3", "4", "5"]:
-                            print("Invalid choice. Please enter a valid option.")
+                            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
                             continue
                         if selected_option == "1":
-                            ticket.print_ticket_details()  # Assuming print_ticket_details is a method of the Ticket class
-                        elif selected_option == "2":  
+                            ticket.print_ticket_details(
+                                ticket
+                            )  # Assuming print_ticket_details is a method of the Ticket class
+                        elif selected_option == "2":
                             # redirect request
                             Operator.redirect_request(ticket)
                             file_manager.save_tickets(loaded_requests)
@@ -110,9 +120,7 @@ def operator_functionality(operator, Ticket):
                             file_manager.save_tickets(loaded_requests)
                     break  # Exit the loop if the ticket is successfully processed
                 else:
-                    print("Ticket not found. Please enter a valid ticket number.")
-
-
+                    print("TICKET NOT FOUND. PLEASE ENTER A VALID TICKET NUMBER")
         elif choice == "0":
             # RETURN TO ROLE SELECTION MENU
             break
@@ -120,90 +128,93 @@ def operator_functionality(operator, Ticket):
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
 
 
-
-
 def sales_department_functionality(Salesperson):
     file_manager = FileManager()
-    sales_person =Salesperson()
+    sales_person = Salesperson()
     while True:
         request_to_buy = []
-        print("SALES department:\n")
-        choice = input("SELECT ACTION: 1. VIEW REQUESTS, 2. SEARCH REQUESTS: ").strip().lower()
-        if choice == "1": # VIEW REQUESTS
+        print("=" * 30)
+        print("SALES DEPARTMENT:\n")
+        choice = input(
+            "SELECT ACTION:   1. VIEW REQUESTS,   2. SEARCH REQUESTS, '0' GO BACK: "
+        ).strip()
+        if choice == "0":
+            return  # Вернуться к выбору роли
+        elif choice == "1":  # VIEW REQUESTS
             tickets = file_manager.load_tickets_from_file()
             for ticket in tickets:
                 if ticket.executor == "SALES_DEPT":
                     request_to_buy.append(ticket)
             sales_person.print_requests(request_to_buy)
 
-        elif choice == "2": # SEARCH REQUESTS 
+        elif choice == "2":  # SEARCH REQUESTS
             while True:
                 request_number = None
                 requests = file_manager.load_tickets_from_file()
-                request_number = input("Введите номер тикета для поиска: ")
+                request_number = (
+                    input("ENTER THE TICKET NUMBER TO SEARCH: ").lower().strip()
+                )
+                if request_number == "0":
+                    break  # Return to the sales department menu
                 request = sales_person.find_ticket(request_number, requests)
-                # возвращает только тикеты направленные на отдел продаж
                 if request:
                     print(request)
                     while True:
-                        # варианты что можно сделать с выбранным тикетом
-                        print("нажмите цифру с нужным вариантом:")
-                        selected_option = input("Select an action:\n1. View details\n2. Process the lead\n0 to return to the menu:\n ").strip().lower()
+                        # options for the selected ticket
+                        print("PRESS THE NUMBER WITH THE RELEVANT OPTION:")
+                        selected_option = input(
+                            "SELECT AN ACTION:\n1. VIEW DETAILS\n2. PROCESS THE LEAD\n0. TO RETURN TO THE MENU\n "
+                        ).strip()
                         if selected_option not in ["0", "1", "2"]:
-                            print("Invalid choice. Please enter a valid option.")
+                            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
                             continue
                         if selected_option == "0":
-                            break  # Return to the menu 
+                            break  # Return to the search requests menu
                         elif selected_option == "1":
-                            sales_person.print_ticket_details(request)  # Assuming print_ticket_details is a method of the Ticket class
+                            sales_person.print_ticket_details(request)
                         elif selected_option == "2":  # process_the_lead
                             sales_person.process_the_lead(request)
-                            # process_the_lead
                             solution = sales_person.process_the_lead(request)
                             if solution:
                                 file_manager.save_tickets(requests)
                     break  # Exit the loop if the ticket is successfully processed
                 else:
-                    print("Ticket not found. Please enter a valid ticket number.")
+                    print("TICKET NOT FOUND. PLEASE ENTER A VALID TICKET NUMBER")
 
-
-
-        elif choice == "0": 
-            # RETURN TO ROLE SELECTION MENU
-            break
-        else:
-            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
 
 def service_department_functionality(ServiceDepartment):
     file_manager = FileManager()
     service_dept = ServiceDepartment()
     while True:
         request_to_service = []
-        print("SERVICE department:\n")
-        choice = input("SELECT ACTION:   1. VIEW REQUESTS,   2. SEARCH REQUESTS: ").strip().lower()
-        if choice == "1": # VIEW REQUESTS
+        print("=" * 30)
+        print("SERVICE DEPARTMENT:\n")
+        choice = input("SELECT ACTION: 1. VIEW REQUESTS, 2. SEARCH REQUESTS: ").strip()
+        if choice == "1":  # VIEW REQUESTS
             tickets = file_manager.load_tickets_from_file()
             for ticket in tickets:
                 if ticket.executor == "SERVICE_DEPT":
                     request_to_service.append(ticket)
             service_dept.print_requests(request_to_service)
 
-        elif choice == "2": # SEARCH REQUESTS   
+        elif choice == "2":  # SEARCH REQUESTS
             while True:
                 request_number = None
                 requests = file_manager.load_tickets_from_file()
-                request_number = input("Введите   номер тикета для поиска: ")
+                request_number = input("ENTER THE TICKET NUMBER TO SEARCH:")
                 request = service_dept.find_ticket(request_number, requests)
                 if request:
                     print(request)
                     while True:
-                        print("нажмите цифру с нужным вариантом:")
-                        selected_option = input("Select an action:\n1. View details\n2. Process the service request\n0 to return to the menu:\n ").strip().lower()
+                        print("PRESS THE NUMBER CORRESPONDING TO THE OPTION:")
+                        selected_option = input(
+                            "SELECT AN ACTION:\n1. VIEW DETAILS\n2. PROCESS THE LOGISTICS REQUEST\n0. TO RETURN TO THE MENU:\n "
+                        ).strip()
                         if selected_option not in ["0", "1", "2"]:
-                            print("Invalid choice. Please enter a valid option.")
+                            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
                             continue
                         if selected_option == "0":
-                            break  # Return to the menu   
+                            break  # Return to the menu
                         elif selected_option == "1":
                             service_dept.print_ticket_details(request)
                         elif selected_option == "2":  # process_service_request
@@ -212,44 +223,54 @@ def service_department_functionality(ServiceDepartment):
                                 file_manager.save_tickets(requests)
                     break  # Exit the loop if the ticket is successfully processed
                 else:
-                    print("Ticket not found. Please enter a valid ticket number.")
+                    print("TICKET NOT FOUND. PLEASE ENTER A VALID TICKET NUMBER")
 
-        elif choice == "0":   
+        elif choice == "0":
             # RETURN TO ROLE SELECTION MENU
             break
         else:
             print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
+
 
 def delivery_department_functionality(DeliveryDepartment):
     file_manager = FileManager()
     delivery_dept = DeliveryDepartment()
     while True:
         request_to_deliver = []
-        print("LOGISTICS department:\n")
-        choice = input("SELECT ACTION:  1. VIEW REQUESTS,  2. SEARCH REQUESTS: ").strip().lower()
-        if choice == "1": # VIEW REQUESTS
+        print("=" * 30)
+        print("LOGISTICS DEPARTMENT:\n")
+        choice = input(
+            "SELECT ACTION:   1. VIEW REQUESTS,   2. SEARCH REQUESTS, '0' GO BACK: "
+        ).strip()
+        if choice == "0":
+            break  # Return to the main menu
+        elif choice == "1":  # VIEW REQUESTS
             tickets = file_manager.load_tickets_from_file()
             for ticket in tickets:
                 if ticket.executor == "LOGISTICS_DEPT":
                     request_to_deliver.append(ticket)
             delivery_dept.print_requests(request_to_deliver)
 
-        elif choice == "2": # SEARCH REQUESTS  
+        elif choice == "2":  # SEARCH REQUESTS
             while True:
                 request_number = None
                 requests = file_manager.load_tickets_from_file()
-                request_number = input("Введите  номер тикета для поиска: ")
+                request_number = input("ENTER THE TICKET NUMBER TO SEARCH: ").strip()
+                if request_number == "0":
+                    break  # Return to the logistics department menu
                 request = delivery_dept.find_ticket(request_number, requests)
                 if request:
                     print(request)
                     while True:
-                        print("нажмите цифру с нужным вариантом:")
-                        selected_option = input("Select an action:\n1. View details\n2. Process the logistics request\n0 to return to the menu:\n ").strip().lower()
+                        print("PRESS THE NUMBER CORRESPONDING TO THE DESIRED OPTION: ")
+                        selected_option = input(
+                            "SELECT AN ACTION:\n1. VIEW DETAILS\n2. PROCESS THE LOGISTICS REQUEST\n0. TO RETURN TO THE MENU:\n "
+                        ).strip()
                         if selected_option not in ["0", "1", "2"]:
-                            print("Invalid choice. Please enter a valid option.")
+                            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
                             continue
                         if selected_option == "0":
-                            break  # Return to the menu  
+                            break  # Return to the search requests menu
                         elif selected_option == "1":
                             delivery_dept.print_ticket_details(request)
                         elif selected_option == "2":  # process_logistics_request
@@ -258,15 +279,7 @@ def delivery_department_functionality(DeliveryDepartment):
                                 file_manager.save_tickets(requests)
                     break  # Exit the loop if the ticket is successfully processed
                 else:
-                    print("Ticket not found. Please enter a valid ticket number.")
-
-        elif choice == "0":  
-            # RETURN TO ROLE SELECTION MENU
-            break
-        else:
-            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION")
-
-
+                    print("TICKET NOT FOUND. PLEASE ENTER A VALID TICKET NUMBER")
 
 
 if __name__ == "__main__":

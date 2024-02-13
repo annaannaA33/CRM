@@ -1,12 +1,48 @@
-pip install secure-smtplib
+### Setup and Usage
+
+1. Clone this repository
+2. Rename `rename_to.env` to `.env`
+3. Update **EMAIL_ADDRESS** and **EMAIL_PASSWORD** values in `.env`. In order to get the _Gmail_ authentication work, you need to create a password for the application [here](https://myaccount.google.com/apppasswords)
+4. Install:
+pip install secure-smtplib 
 pip install requests
+pip install python-dotenv 
+pip install questionary
 
 
-это срм для контроля заявок от клиентов и эфективной обработки заявок. и их обращений на горячую линию или в чат на сайте. 
-при старте спрашиваем роль.  от роли зависят доступные функции.функции оператора: создать  заявку, открыть заявку, посмотреть все заявки в втатусе  отктыто, закрыто, выполнено. направить заявку на исполнителя , закрыть выполненную заявку.  
-Принимает обращение оператор.  при обращении клиента оператор открывает создает заявку, и заполняет ее. У заявки такие поля: айди(для каждой заявки генерируется уникальный  айди ) , телефон, тип заявки(выбор: серевис, отдел продаж, проблемы с доставкой), источник обращения(выбор: чат на сайте или звонок), описание задачи клиента, исполнитель(выбор:  курьеры, специалист сервиса, консультант по товару отдела продаж), статус, решение дата и  время создания.  При обращении клиента оператор вводит имя, телефон, указывает  тип заявки, указывает источник обращения, описывает что нужно клиенту, назначает исполнителя(как бы направляя на соответствующий отдел), статус при соэранении устанавливается новая, время созания тоже отмечается автоматически. Поле решение оператор не трогает. Далее у оператору распечатывается вся заявка и спрашиваем все ли верно и сохраняем ли? Если да, сохраняем. Если нет, предлагаем заполнить заново заявку. Сохраняем заявки в файле csv , в каждой строке отдельная заявка.   Бывают статусы заявок: активна- при создании, в работе - когда специалист  отдела берет в работу ,  решено - когда специалист пишет решение в заявке, закрыто-после проверки что вопрос клиента решен , закрывает только оператор. 
-ТАкже оператор может просмотреть список заявок с разными статусами:
-все заявки, решенные, активные, закрытые. 
-Если при старте роль указывается - отдел продаж , то высвечивается другое меню. Отображаем список заявок предназначенных для отдела продаж(статус - актавна, ответственный - отдел продаж). предлагаем ввести номер заявки которую хотим открыть.  Если номер внесли правильно, то после высвечивается заявка полностью и предлагаем внести решение заявки, затем предлагаем изменить статус  заявки.  Если такой заявки с указанным номером нет, просим внести заново заявку.  также если пользователь вводит x- выход из пользователя. тогда снова спрашиваем роль или предлагаем нажать exit для выхода из программы.
-При выборе роли доставка. Отображаем список заявок предназначенных для отдела доставки(статус - актавна, ответственный - отдел доставки(LOGISTICS_DEPT)). предлагаем ввести номер заявки которую хотим открыть.  Если номер внесли правильно, то после высвечивается заявка полностью и предлагаем внести решение заявки, затем предлагаем изменить статус  заявки.  Если такой заявки с указанным номером нет, просим внести заново заявку.  также если пользователь вводит x- выход из пользователя. тогда снова спрашиваем роль или предлагаем нажать exit для выхода из программы.
-При выборе роли сервис. Отображаем список заявок предназначенных для отдела сервиса(статус - актавна, ответственный - SERVICE_DEPT). Дальше сотрудник моет обрабатывать завки. предлагаем ввести номер заявки которую хотим открыть.  Если номер внесли правильно, то после высвечивается заявка полностью и предлагаем внести решение заявки, затем предлагаем изменить статус  заявки.  Если такой заявки с указанным номером нет, просим внести заново заявку.  также если пользователь вводит x- выход из пользователя. тогда снова спрашиваем роль или предлагаем нажать exit для выхода из программы.
+
+5. Run the program using: `python main.py
+
+
+Description
+Imagine there's an online store selling various products. It's a CRM system designed to store and manage customer requests. Requests can come from two sources: chat and phone calls. Clients can reach out to the support department for service inquiries, assistance with purchases, or delivery-related queries. All requests are received by an operator who directs them to the appropriate department for processing.
+
+There are several roles with different processing capabilities:
+
+Operator Role:
+
+Accept a request, fill in all fields, and save the request.
+View the entire list of requests.
+Modify a request.
+Send a reminder to the executor regarding a request.
+Currently, it's assumed that there's one operator in each department. The operator can filter requests by the source of the inquiry, client's phone number, responsible party, or processing stage.
+
+Sales Department Employee Role:
+
+View all requests directed to the sales department.
+Process a request and make a decision.
+Find a request by its number.
+Service Department Employee Role:
+
+View all requests directed to the service department.
+Process a request and make a decision.
+Find a request by its number.
+Take ownership of a request.
+Logistics Department Employee Role:
+
+View all requests directed to the logistics department.
+Process a request and make a decision.
+Find a request by its number.
+Upon starting the program, the user is prompted to select a role, and then the functionality corresponding to the chosen role is displayed.
+
+For data storage, CSV files are used, and for sending data, environment variables are utilized.
