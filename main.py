@@ -9,38 +9,33 @@ import os
 import sys
 import questionary
 from questionary import Choice
+from Administrator import Administrator
+from User import User
 
 
 def main():
     operator = Operator()
-    while True:
-        print("WELCOME TO THE ONLINE STORE CRM SYSTEM! PLEASE SELECT YOUR ROLE:")
-
-        choices = [
-            Choice("Operator", value=1),
-            Choice("Salesperson", value=2),
-            Choice("Logistics", value=3),
-            Choice("Service", value=4),
-            Choice("Exit", value=0),
-        ]
-
-        choice = questionary.select(
-            "Select your role:", choices=choices, use_shortcuts=True
-        ).ask()
-
-        if choice == 1:
+    file_manager = FileManager()
+    file_manager.init_csv_file()
+    users = file_manager.load_users()
+    role = User.login(users)
+    
+    if role:
+        os.system("cls" if os.name == "nt" else "clear")
+        print(f"You login successful! Your role is: {role}")
+        # Trigger the appropriate functionality based on the role
+        if role == 'admin':
+            admin_functionality()
+        elif role == 'operator':
             operator_functionality(operator, Ticket)
-        elif choice == 2:
+        elif role == 'sales':
             sales_department_functionality(Salesperson)
-        elif choice == 3:
+        elif role == 'delivery':
             delivery_department_functionality(DeliveryDepartment)
-        elif choice == 4:
+        elif role == 'service':
             service_department_functionality(ServiceDepartment)
-        elif choice == 0:
-            print("Exiting the program. Goodbye!")
-            break
-        else:
-            print("INVALID CHOICE. PLEASE ENTER A VALID OPTION.")
+    else:
+        print("Login failed. Exiting the program.")
 
 
 def operator_functionality(operator, Ticket):
@@ -280,6 +275,55 @@ def delivery_department_functionality(DeliveryDepartment):
                     break  # Exit the loop if the ticket is successfully processed
                 else:
                     print("TICKET NOT FOUND. PLEASE ENTER A VALID TICKET NUMBER")
+
+
+def admin_functionality():
+    admin = Administrator('admin_username', 'admin_password', 'admin_department')
+    
+    while True:
+        print("\nADMINISTRATOR MODE:")
+        print("1. Manage Users")
+        print("2. Manage Tickets")
+        print("0. Exit Admin Mode")
+        choice = input("Enter your choice: ").strip()
+
+        if choice == "1":
+            manage_users()  
+        elif choice == "0":
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+
+
+def manage_users():
+    file_manager = FileManager()
+    while True:
+        print("\nMANAGE USERS:")
+        print("1. Register New User")
+        print("2. View All Users")
+        print("3. Delete User")
+        print("0. Go Back")
+        choice = int(input("Enter your choice: ").strip())
+
+        if choice == 1:
+            # Register New User
+            new_user = Administrator.register_user()
+            file_manager.save_new_user(new_user) 
+        elif choice == 2: 
+            # View All Users
+            users = file_manager.load_users()
+            for user in users:
+                print(user)
+        elif choice == 3:
+            # Delete User
+            users = file_manager.load_users()
+            users = Administrator.delete_user(users)
+            file_manager.save_all_users(users)
+
+        elif choice == 0:
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
 
 
 if __name__ == "__main__":

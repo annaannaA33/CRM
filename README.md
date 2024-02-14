@@ -8,7 +8,7 @@ pip install secure-smtplib
 pip install requests
 pip install python-dotenv 
 pip install questionary
-
+pip install bcrypt
 
 
 5. Run the program using: `python main.py

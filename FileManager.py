@@ -1,7 +1,7 @@
 import os
 import csv
 from Ticket import Ticket
-
+from User import User
 
 class FileManager:
     def __init__(self):
@@ -91,3 +91,47 @@ class FileManager:
             writer.writeheader()
             for ticket in tickets:
                 writer.writerow(ticket.as_dict())
+
+    def save_new_user(self, user):
+        hashed_password = user.hash_password(user.password)
+        with open('users.csv', mode='a', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow([user.username, hashed_password, user.role])
+        print("New user successfully registered.")
+
+   
+    def save_all_users(self, users):
+        with open('users.csv', 'w', newline='') as csvfile:
+            fieldnames = ['username', 'password', 'role']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            
+            writer.writeheader()
+            for user in users:
+                writer.writerow({
+                    'username': user.username,
+                    'password': user.password,
+                    'role': user.role
+                })
+        print("User list successfully updated.")
+
+    def load_users(self):
+        users = []
+        with open('users.csv', 'r') as file:
+            reader = csv.reader(file)
+            next(reader)  # Skip the header row
+            for row in reader:
+                username, password, role = row
+                user = User(username, password, role)
+                users.append(user)
+        return users
+    
+    def init_csv_file(self):
+        # Create a function to initialize the CSV file with headers if it doesn't exist
+        filename = 'users.csv'
+        headers = ['username', 'password', 'role']
+
+        # Check if the file exists
+        if not os.path.exists(filename):
+            with open(filename, 'w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=headers)
+                writer.writeheader()
