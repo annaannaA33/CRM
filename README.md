@@ -14,6 +14,8 @@ pip install bcrypt
 5. Run the program using: `python main.py
 
 
+
+
 Description
 Imagine there's an online store selling various products. It's a CRM system designed to store and manage customer requests. Requests can come from two sources: chat and phone calls. Clients can reach out to the support department for service inquiries, assistance with purchases, or delivery-related queries. All requests are received by an operator who directs them to the appropriate department for processing.
 
