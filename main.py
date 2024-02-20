@@ -278,6 +278,7 @@ def delivery_department_functionality(DeliveryDepartment):
 
 
 def admin_functionality():
+    file_manager = FileManager()
     admin = Administrator('admin_username', 'admin_password', 'admin_department')
     
     while True:
@@ -288,7 +289,9 @@ def admin_functionality():
         choice = input("Enter your choice: ").strip()
 
         if choice == "1":
-            manage_users()  
+            manage_users()
+        elif choice == "2":
+            manage_tickets(file_manager)  
         elif choice == "0":
             break
         else:
@@ -311,9 +314,12 @@ def manage_users():
             file_manager.save_new_user(new_user) 
         elif choice == 2: 
             # View All Users
+            print("=" * 30)
+            print("LIST OF USERS:")
             users = file_manager.load_users()
             for user in users:
                 print(user)
+            print("=" * 30)
         elif choice == 3:
             # Delete User
             users = file_manager.load_users()
@@ -325,6 +331,29 @@ def manage_users():
         else:
             print("Invalid choice. Please enter a valid option.")
 
+def manage_tickets(file_manager):
+    while True:
+        list_of_tickets = file_manager.load_tickets_from_file()
+        print("\nMANAGE TICKETS:")
+        print("1. View All Tickets")
+        print("2. Search Tickets - TODO") #TODO
+        print("3. Update Ticket - TODO")  #TODO
+        print("0. Go Back")
+        choice = input("Enter your choice: ").strip()
+        if choice == "1":
+            Operator.print_requests(list_of_tickets)
+        elif choice == "2":
+            downloaded_requests = file_manager.load_tickets_from_file()
+            ticket_number = input("ENTER THE TICKET NUMBER TO SEARCH (OR 0 TO RETURN TO THE MENU): ").strip()
+            if ticket_number == "0":
+                break  # Return
+            Operator.find_ticket(ticket_number, downloaded_requests)
+        #elif choice == "3":
+        #    pass
+        elif choice == "0":
+            break # Return
+        else:
+            print("Invalid choice. Please enter a valid option.")
 
 if __name__ == "__main__":
     main()

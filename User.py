@@ -8,7 +8,7 @@ class User:
         self.role = role
 
     def __str__(self) -> str:
-        return f'{self.username}, {self.role}'
+        return f'login: {self.username} - role: {self.role}'
 
     
     @staticmethod

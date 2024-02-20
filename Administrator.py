@@ -46,42 +46,20 @@ class Administrator(User, Operator):
             print("New user registered successfully.")
             return new_user
 
-    def manage_tickets(self, file_manager):
-        while True:
-            print("\nMANAGE TICKETS:")
-            print("1. View All Tickets")
-            print("2. Search Tickets")
-            print("3. Update Ticket")
-            print("0. Go Back")
-            choice = input("Enter your choice: ").strip()
 
-            if choice == "1":
-                Operator.print_requests(file_manager)
-            elif choice == "2":
-                downloaded_requests = file_manager.load_tickets_from_file()
-                ticket_number = input("ENTER THE TICKET NUMBER TO SEARCH (OR 0 TO RETURN TO THE MENU): ").strip()
-                if ticket_number == "0":
-                    break  # Return
-                Operator.find_ticket(ticket_number, downloaded_requests)
-            #elif choice == "3":
-            #    pass
-            elif choice == "0":
-                break # Return
-            else:
-                print("Invalid choice. Please enter a valid option.")
 
     def delete_user(users):
         while True:
-            input_login = input('Enter the login to delete user (or 0 to go back): ')
+            input_login = input('Enter the login to delete user (or  0 to go back): ')
             if input_login == "0":
                 break
             try:
-                user_to_delete = next(user for user in users if user.login == input_login)
+                user_to_delete = next(user for user in users if user.username == input_login)
                 users.remove(user_to_delete)
                 print("User successfully deleted.")
             except StopIteration:
                 print("User not found.")
-            else:
-                return users
+            finally:
+                return users  # Always return the updated list of users
 
 

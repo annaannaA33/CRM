@@ -1,7 +1,7 @@
 username,password,role
 alogin,$2b$12$Ahx62liWbkh25eiZz4Be1uXl//KghQAU.iS4y5OT31A1zJZisv1fi,admin
 aaa,$2b$12$rLlKEyMDS2C0QwM56B.N/ejSXFlgDwExiCLn1n5mRWau.Fn7wWCOi,operator
-delivery,$2b$12$XW/DjpSBHKAIu1WQwtWov.A33yS/Y9p7JvLI4Vg6fjan2LzfWC5HC,operator
 sales,$2b$12$VUzWzMpRS1JN.kSEnZrpmOdeDGVZqzjxjORxKDWSxiZhSlSDYAtwu,sales
 service,$2b$12$mc2IIcm3ewi2.ov32FzhFeyVf1M5cD/qb9V8zMZ4DWSq0aqgLCpgy,service
 seler1,$2b$12$9THu85GNyVfLoAucfLIC4.dIGrWiZb2fLv7KEpzn8RICmyHNI5IUq,sales
+service2,$2b$12$CmcrzV4z/b8KYFrM4uWxteEvyqyz6OOOBaH8CBi5caZeq7HuoCzWy,service
