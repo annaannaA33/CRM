@@ -2,7 +2,7 @@
 
 1. Clone this repository
 2. Rename `rename_to.env` to `.env`
-3. Update **EMAIL_ADDRESS** and **EMAIL_PASSWORD** values in `.env`. In order to get the _Gmail_ authentication work, you need to create a password for the application [here](https://myaccount.google.com/apppasswords)
+3. Update **executor_email**, **sender_email_data** and **sender_password_data** values in `.env`. In order to get the _Gmail_ authentication work, you need to create a password for the application [here](https://myaccount.google.com/apppasswords)
 4. Install:
 pip install secure-smtplib 
 pip install requests
